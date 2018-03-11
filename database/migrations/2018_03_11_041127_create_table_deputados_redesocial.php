@@ -30,5 +30,6 @@ class CreateTableDeputadosRedesocial extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('deputadosRedeSocial');
     }
 }

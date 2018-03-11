@@ -38,5 +38,6 @@ class CreateTableDeputados extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('deputados');
     }
 }
