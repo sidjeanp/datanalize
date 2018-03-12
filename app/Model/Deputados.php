@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Deputados extends Model
 {
     //
-    protected $fillable = ['name'];
+    protected $table = 'deputados';
+    protected  $primaryKey = 'id';
+    protected $fillable = ['idLegislatura','nomeCivil','cpf','sexo','urlWebsite','sexo','dataNascimento',
+        'dataFalecimento','ufNascimento','municipioNascimento','escolaridade'];
 }
