@@ -23,6 +23,8 @@ class CreateTableDeputadosGabinetes extends Migration
             $table->string('andar',20);
             $table->string('telefone',50);
             $table->string('email',250);
+            $table->timestamps();
+            $table->softDeletes();
 
         });
     }

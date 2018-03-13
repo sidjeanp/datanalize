@@ -19,6 +19,8 @@ class CreateTableDeputadosRedesocial extends Migration
             $table->integer('idDeputados');
             $table->string('url',500);
             $table->string('dataNascimento',25);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

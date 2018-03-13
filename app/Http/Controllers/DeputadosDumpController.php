@@ -9,12 +9,12 @@ class DeputadosDumpController extends Controller
 {
     //
     public function getList(){
-        return planAtividades::all();
+        return Deputados::all();
     }
 
     public function postNewDeputado($dados){
 
-        planAtividades::create($dados);
+        Deputados::create($dados);
 
         return 'Planilha criada com sucesso';
     }
@@ -45,8 +45,17 @@ class DeputadosDumpController extends Controller
         $response = curl_exec($ch);
         $aDeputados = json_decode($response, true);
 
+        $aux = '';
+        foreach ($aDeputados['dados'] as $dado){
+            $aux .= $dado['id'].' - '.$dado['nome'].'<br />';
+            $this->postNewDeputado($dado);
+        }
 
-        return print_r($aDeputados['dados'][1],true);
+        return $aux;
+
+
+
+        //return print_r($aDeputados['dados'],true);
         curl_close($ch);
 
         //return view('teste');

@@ -28,6 +28,8 @@ class CreateTableDeputadosUltimoStatus extends Migration
             $table->string('situacao',50);
             $table->string('condicaoEleitoral',50);
             $table->string('descricaoStatus',500);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

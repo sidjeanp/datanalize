@@ -15,17 +15,26 @@ class CreateTableDeputados extends Migration
     {
         //
         Schema::create('deputados',function(Blueprint $table){
-            $table->integer('id');
-            $table->integer('idLegislatura');
-            $table->string('nomeCivil',250);
-            $table->string('cpf',20);
-            $table->string('sexo',1);
-            $table->string('urlWebsite',250);
-            $table->string('dataNascimento',25);
-            $table->string('dataFalecimento',25);
-            $table->string('ufNascimento',2);
-            $table->string('municipioNascimento',80);
-            $table->string('escolaridade',250);
+            $table->increments('id');
+            $table->integer('idDeputado')->nullable();
+            $table->integer('idLegislatura')->nullable();
+            $table->string('nome',250)->nullable();
+            $table->string('nomeCivil',250)->nullable();
+            $table->string('cpf',20)->nullable();
+            $table->string('sexo',1)->nullable();
+            $table->string('urlWebsite',250)->nullable();
+            $table->string('uri',250)->nullable();
+            $table->string('dataNascimento',25)->nullable();
+            $table->string('dataFalecimento',25)->nullable();
+            $table->string('ufNascimento',2)->nullable();
+            $table->string('municipioNascimento',80)->nullable();
+            $table->string('escolaridade',250)->nullable();
+            $table->string('siglaPartido',30)->nullable();
+            $table->string('uriPartido',250)->nullable();
+            $table->string('siglaUf',2)->nullable();
+            $table->string('urlFoto',250)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
 
         });
     }
