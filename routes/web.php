@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/gravadeputados', 'DeputadosDumpController@getDadosAbertosDeputados')->name('Deputados');
+Route::get('/dump/testedeputados', 'DeputadosDumpController@getDadosAbertosDeputados')->name('Deputados');
+Route::get('/dump/deputadosdetalhes', 'DeputadosDumpController@dumpDeputadosDetalhes')->name('Deputados');
+Route::get('/dump/deputados', 'DeputadosDumpController@buscaDadosAbertosDeputados')->name('Deputados');

@@ -13,25 +13,14 @@ class CreateTableDeputados extends Migration
      */
     public function up()
     {
-        //
+        //'id','uri','nome','siglaPartido','uriPartido','siglaUf','idLegislatura','urlFoto'
         Schema::create('deputados',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('idDeputado')->nullable();
-            $table->integer('idLegislatura')->nullable();
             $table->string('nome',250)->nullable();
-            $table->string('nomeCivil',250)->nullable();
-            $table->string('cpf',20)->nullable();
-            $table->string('sexo',1)->nullable();
-            $table->string('urlWebsite',250)->nullable();
-            $table->string('uri',250)->nullable();
-            $table->string('dataNascimento',25)->nullable();
-            $table->string('dataFalecimento',25)->nullable();
-            $table->string('ufNascimento',2)->nullable();
-            $table->string('municipioNascimento',80)->nullable();
-            $table->string('escolaridade',250)->nullable();
             $table->string('siglaPartido',30)->nullable();
             $table->string('uriPartido',250)->nullable();
             $table->string('siglaUf',2)->nullable();
+            $table->integer('idLegislatura')->nullable();
             $table->string('urlFoto',250)->nullable();
             $table->timestamps();
             $table->softDeletes();

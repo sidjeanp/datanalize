@@ -16,18 +16,20 @@ class CreateTableDeputadosUltimoStatus extends Migration
         //
         Schema::create('deputadosUltimoStatus',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('idDeputados');
-            $table->boolean('flgAtivo');
-            $table->integer('idLegislatura');
-            $table->string('nome',250);
-            $table->string('siglaPartido',10);
-            $table->string('siglaUf',2);
-            $table->string('uriPartido',250);
-            $table->string('urlFoto',250);
-            $table->string('data',25);
-            $table->string('situacao',50);
-            $table->string('condicaoEleitoral',50);
-            $table->string('descricaoStatus',500);
+            $table->integer('idDeputados')->nullable();
+            $table->string('uri',250)->nullable();
+            $table->string('nome',250)->nullable();
+            $table->string('siglaPartido',10)->nullable();
+            $table->string('uriPartido',250)->nullable();
+            $table->string('siglaUf',2)->nullable();
+            $table->integer('idLegislatura')->nullable();
+            $table->string('urlFoto',250)->nullable();
+            $table->string('data',25)->nullable();
+            $table->string('nomeEleitoral',250)->nullable();
+            $table->string('situacao',50)->nullable();
+            $table->string('condicaoEleitoral',50)->nullable();
+            $table->string('descricaoStatus',500)->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
