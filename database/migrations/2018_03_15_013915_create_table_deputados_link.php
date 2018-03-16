@@ -16,21 +16,11 @@ class CreateTableDeputadosLink extends Migration
         //
         Schema::create('deputadosLinks',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('idDeputadoDetalhe');
-            $table->string('nomeCivil',250)->nullable();
-            $table->string('uri',250)->nullable();
-            $table->string('cpf',20)->nullable();
-            $table->string('sexo',1)->nullable();
-            $table->string('urlWebsite',250)->nullable();
-            $table->string('dataNascimento',25)->nullable();
-            $table->string('dataFalecimento',25)->nullable();
-            $table->string('ufNascimento',2)->nullable();
-            $table->string('municipioNascimento',80)->nullable();
-            $table->string('escolaridade',250)->nullable();
-
+            $table->integer('idDeputadosStatus');
+            $table->string('href',500)->nullable();
+            $table->string('rel',500)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

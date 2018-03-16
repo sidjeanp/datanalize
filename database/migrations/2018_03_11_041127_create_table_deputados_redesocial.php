@@ -16,9 +16,8 @@ class CreateTableDeputadosRedesocial extends Migration
         //
         Schema::create('deputadosRedeSocial',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('idDeputados');
-            $table->string('url',500);
-            $table->string('dataNascimento',25);
+            $table->integer('idDeputadosStatus');
+            $table->string('url',500)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

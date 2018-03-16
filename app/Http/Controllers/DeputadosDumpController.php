@@ -87,8 +87,8 @@ class DeputadosDumpController extends Controller
         $aux ='';
         foreach ($deputados as $deputado){
             $aux .= $deputado->id.'<br />';
-            $this->getDeputadosDetalhes($deputado->id);
-            //return $aux;
+            $aux = $this->getDeputadosDetalhes($deputado->id);
+            return $aux;
         }
 
         return $aux;
@@ -97,10 +97,8 @@ class DeputadosDumpController extends Controller
     public function getDeputadosDetalhes($id){
         //Paramotros do rest
 
-
         //URL do servidor rest que disponibiliza os dados abertos dos deputados
         $url = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'.$id;
-
 
         try{
             $ch = curl_init();
@@ -108,9 +106,6 @@ class DeputadosDumpController extends Controller
             curl_setopt_array($ch, [
 
                 CURLOPT_URL => $url,
-
-                //CURLOPT_POST => false,
-                //CURLOPT_POSTFIELDS => $data,
 
                 CURLOPT_HTTPHEADER => [
                     //'Authorization: Bearer ' . $token,
@@ -134,12 +129,25 @@ class DeputadosDumpController extends Controller
                 $aDados = array_merge( $arrTeste,$aDeputados['dados']);
                 //$dado['idDeputado']=$dado['id'];
                 DeputadosDetalhes::create($aDados);
+                $dus = DeputadosUltimoStatus::create($aDados['ultimoStatus']);
+                return print_r($dus->attributes,true);
+
+                $dadosRedeSocial = array();
+                foreach ($aDados['redeSocial'] as $itens){
+                    $dadosRedeSocial[] = array_merge(['idDeputadosStatus'=>''], $itens);
+                }
+
+                DeputadosUltimoStatus::create($dadosRedeSocial);
             //}
         }
         catch(Exception $e){
             return print_r($e,true);
         }
 
+
+    }
+
+    public function inputDeputadosUltimoStatus($dados){
 
     }
 
