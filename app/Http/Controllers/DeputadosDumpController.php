@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use  App\Model\Deputados;
 use App\Model\DeputadosDetalhes;
 use App\Model\DeputadosUltimoStatus;
+use App\Model\DeputadosRedeSocial;
+use App\Model\DeputadosGabinete;
+use App\Model\DeputadosLink;
 use Mockery\Exception;
 
 class DeputadosDumpController extends Controller
@@ -88,7 +91,7 @@ class DeputadosDumpController extends Controller
         foreach ($deputados as $deputado){
             $aux .= $deputado->id.'<br />';
             $aux = $this->getDeputadosDetalhes($deputado->id);
-            return $aux;
+            //return $aux;
         }
 
         return $aux;
@@ -120,24 +123,28 @@ class DeputadosDumpController extends Controller
             $response = curl_exec($ch);
             $aDeputados = json_decode($response, true);
 
-            //return print_r($aDeputados['dados'],true);
-            //return print_r($dado,,true);
+            $aDados = array_merge( array("idDeputados"=>$aDeputados['dados']['id']),$aDeputados['dados']);
 
-            //foreach ($aDeputados as $dado){
-                //return print_r($dado,true);
-                $arrTeste = array("idDeputado"=>$aDeputados['dados']['id']);
-                $aDados = array_merge( $arrTeste,$aDeputados['dados']);
-                //$dado['idDeputado']=$dado['id'];
-                DeputadosDetalhes::create($aDados);
-                $dus = DeputadosUltimoStatus::create($aDados['ultimoStatus']);
-                return print_r($dus->attributes,true);
+            $deputadoDetalhe = DeputadosDetalhes::create($aDados);
 
-                $dadosRedeSocial = array();
-                foreach ($aDados['redeSocial'] as $itens){
-                    $dadosRedeSocial[] = array_merge(['idDeputadosStatus'=>''], $itens);
-                }
+            foreach ($aDados['redeSocial'] as $item) {
+                $dadosRedeSocial = array_merge(['idDeputados' => $deputadoDetalhe->idDeputados], ['url'=>$item]);
+                DeputadosRedeSocial::create($dadosRedeSocial);
+            }
 
-                DeputadosUltimoStatus::create($dadosRedeSocial);
+            foreach ($aDeputados['links'] as $item) {
+                $dadosLink = array_merge(['idDeputados' => $deputadoDetalhe->idDeputados], $item);
+                DeputadosLink::create($dadosLink);
+            }
+
+
+
+            $deputadosDetalhesStatus = DeputadosUltimoStatus::create(
+                array_merge(array("idDeputados"=>$deputadoDetalhe->idDeputados),$aDados['ultimoStatus']));
+
+            DeputadosGabinete::create(
+                array_merge(array("idDeputadosStatus"=>$deputadosDetalhesStatus->id),$aDados['ultimoStatus']['gabinete']));
+
             //}
         }
         catch(Exception $e){

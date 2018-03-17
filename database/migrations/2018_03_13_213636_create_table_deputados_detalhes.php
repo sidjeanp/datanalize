@@ -17,7 +17,7 @@ class CreateTableDeputadosDetalhes extends Migration
         //'municipioNascimento','escolaridade'
         Schema::create('deputadosDetalhe',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('idDeputado');
+            $table->integer('idDeputados');
             $table->string('nomeCivil',250)->nullable();
             $table->string('uri',250)->nullable();
             $table->string('cpf',20)->nullable();

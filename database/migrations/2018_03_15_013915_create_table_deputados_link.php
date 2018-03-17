@@ -16,7 +16,7 @@ class CreateTableDeputadosLink extends Migration
         //
         Schema::create('deputadosLinks',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('idDeputadosStatus');
+            $table->integer('idDeputados');
             $table->string('href',500)->nullable();
             $table->string('rel',500)->nullable();
             $table->timestamps();
