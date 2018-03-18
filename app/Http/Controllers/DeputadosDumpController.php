@@ -125,25 +125,14 @@ class DeputadosDumpController extends Controller
 
             $aDados = array_merge( array("idDeputados"=>$aDeputados['dados']['id']),$aDeputados['dados']);
 
-            $deputadoDetalhe = DeputadosDetalhes::create($aDados);
+            $deputadoDetalhe = DeputadosDetalhes::where('idDeputados',$aDados['idDeputados']);
 
-            foreach ($aDados['redeSocial'] as $item) {
-                $dadosRedeSocial = array_merge(['idDeputados' => $deputadoDetalhe->idDeputados], ['url'=>$item]);
-                DeputadosRedeSocial::create($dadosRedeSocial);
+            if($deputadoDetalhe->count()){
+                $this->newDeputadosDetalhes($aDados);
             }
+            else{
 
-            foreach ($aDeputados['links'] as $item) {
-                $dadosLink = array_merge(['idDeputados' => $deputadoDetalhe->idDeputados], $item);
-                DeputadosLink::create($dadosLink);
             }
-
-
-
-            $deputadosDetalhesStatus = DeputadosUltimoStatus::create(
-                array_merge(array("idDeputados"=>$deputadoDetalhe->idDeputados),$aDados['ultimoStatus']));
-
-            DeputadosGabinete::create(
-                array_merge(array("idDeputadosStatus"=>$deputadosDetalhesStatus->id),$aDados['ultimoStatus']['gabinete']));
 
             //}
         }
@@ -198,5 +187,53 @@ class DeputadosDumpController extends Controller
         curl_close($ch);
 
         //return view('teste');
+    }
+
+    private function newDeputadosDetalhes($newDados){
+        $deputadoDetalhe = DeputadosDetalhes::create($newDados);
+
+        foreach ($newDados['redeSocial'] as $item) {
+            $dadosRedeSocial = array_merge(['idDeputados' => $deputadoDetalhe->idDeputados], ['url'=>$item]);
+            DeputadosRedeSocial::create($dadosRedeSocial);
+        }
+
+        $deputadosDetalhesStatus = DeputadosUltimoStatus::create(
+            array_merge(array("idDeputados"=>$deputadoDetalhe->idDeputados),$newDados['ultimoStatus']));
+
+        DeputadosGabinete::create(
+            array_merge(array("idDeputadosStatus"=>$deputadosDetalhesStatus->id),$newDados['ultimoStatus']['gabinete']));
+    }
+
+    private function (){
+        //Paramotros do rest
+
+        //URL do servidor rest que disponibiliza os dados abertos dos deputados
+        $url = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'.$id;
+
+        try{
+            $ch = curl_init();
+            //curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt_array($ch, [
+
+                CURLOPT_URL => $url,
+
+                CURLOPT_HTTPHEADER => [
+                    //'Authorization: Bearer ' . $token,
+                    'Content-Type: application/json'
+                    //,'x-li-format: json'
+                ],
+
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_PROTOCOLS => CURLPROTO_HTTPS
+            ]);
+
+            $response = curl_exec($ch);
+            $aDeputados = json_decode($response, true);
+
+            $aDados = array_merge( array("idDeputados"=>$aDeputados['dados']['id']),$aDeputados['dados']);
+        }
+        catch(Exception $e){
+            return print_r($e,true);
+        }
     }
 }
