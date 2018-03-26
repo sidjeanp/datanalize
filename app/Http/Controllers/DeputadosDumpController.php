@@ -104,35 +104,17 @@ class DeputadosDumpController extends Controller
         $url = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'.$id;
 
         try{
-            $ch = curl_init();
-            //curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt_array($ch, [
 
-                CURLOPT_URL => $url,
-
-                CURLOPT_HTTPHEADER => [
-                    //'Authorization: Bearer ' . $token,
-                    'Content-Type: application/json'
-                    //,'x-li-format: json'
-                ],
-
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_PROTOCOLS => CURLPROTO_HTTPS
-            ]);
-
-            $response = curl_exec($ch);
-            $aDeputados = json_decode($response, true);
+            $aDeputados = $this->getDadosApiRest($url);
 
             $aDados = array_merge( array("idDeputados"=>$aDeputados['dados']['id']),$aDeputados['dados']);
 
             $deputadoDetalhe = DeputadosDetalhes::where('idDeputados',$aDados['idDeputados']);
 
-            if($deputadoDetalhe->count()){
+            if($deputadoDetalhe->count() == 0){
                 $this->newDeputadosDetalhes($aDados);
             }
-            else{
 
-            }
 
             //}
         }
@@ -152,26 +134,7 @@ class DeputadosDumpController extends Controller
         //$data = array('name' => 'Blog', 'company' => 'Universidade CodeIgniter');
         $url = 'https://dadosabertos.camara.leg.br/api/v2/deputados';
 
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-
-            CURLOPT_URL => $url,
-
-            //CURLOPT_POST => true,
-
-
-            CURLOPT_HTTPHEADER => [
-                //'Authorization: Bearer ' . $token,
-                'Content-Type: application/json'
-                //,'x-li-format: json'
-            ],
-
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_PROTOCOLS => CURLPROTO_HTTPS
-        ]);
-
-        $response = curl_exec($ch);
-        $aDeputados = json_decode($response, true);
+        $aDeputados = $this->getDadosApiRest ($url);
 
         $aux = '';
         foreach ($aDeputados['dados'] as $dado){
@@ -204,11 +167,11 @@ class DeputadosDumpController extends Controller
             array_merge(array("idDeputadosStatus"=>$deputadosDetalhesStatus->id),$newDados['ultimoStatus']['gabinete']));
     }
 
-    private function (){
+    private function getDadosApiRest ($url){
         //Paramotros do rest
 
         //URL do servidor rest que disponibiliza os dados abertos dos deputados
-        $url = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'.$id;
+        //$url = 'https://dadosabertos.camara.leg.br/api/v2/deputados/'.$id;
 
         try{
             $ch = curl_init();
@@ -228,12 +191,14 @@ class DeputadosDumpController extends Controller
             ]);
 
             $response = curl_exec($ch);
-            $aDeputados = json_decode($response, true);
+            return json_decode($response, true);
 
-            $aDados = array_merge( array("idDeputados"=>$aDeputados['dados']['id']),$aDeputados['dados']);
         }
         catch(Exception $e){
-            return print_r($e,true);
+            return "Falha ao requisitar dados na API $url - ".print_r($e,true);
+        }
+        finally{
+            curl_close($ch);
         }
     }
 }
